@@ -57,9 +57,9 @@ describe Resque::Plugins::WaitingRoom do
       expect { DummyJob.before_perform_waiting_room('args') }.to raise_exception(Resque::Job::DontPerform)
     end
 
-    it "should call ensure_has_expireation" do
+    it "should call ensure_has_expiration" do
       DummyJob.before_perform_waiting_room('args')
-      DummyJob.should_receive(:ensure_has_expireation)
+      DummyJob.should_receive(:ensure_has_expiration)
       DummyJob.before_perform_waiting_room('args')
     end
   end
@@ -125,11 +125,11 @@ describe Resque::Plugins::WaitingRoom do
     end
   end
 
-  context "ensure_has_expireation" do
+  context "ensure_has_expiration" do
     it "should set expire to the key when it doesn't have any expiration" do
       Resque.redis.set(DummyJob.waiting_room_redis_key, 10)
 
-      DummyJob.ensure_has_expireation(DummyJob.waiting_room_redis_key)
+      DummyJob.ensure_has_expiration(DummyJob.waiting_room_redis_key)
       Resque.redis.ttl(DummyJob.waiting_room_redis_key).should == 30
     end
 
@@ -137,7 +137,7 @@ describe Resque::Plugins::WaitingRoom do
       Resque.redis.set(DummyJob.waiting_room_redis_key, 10)
       Resque.redis.expire(DummyJob.waiting_room_redis_key, 15)
 
-      DummyJob.ensure_has_expireation(DummyJob.waiting_room_redis_key)
+      DummyJob.ensure_has_expiration(DummyJob.waiting_room_redis_key)
       Resque.redis.ttl(DummyJob.waiting_room_redis_key).should == 15
     end
   end
